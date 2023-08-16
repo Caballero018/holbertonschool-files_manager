@@ -1,20 +1,19 @@
-/* eslint-disable import/prefer-default-export */
 const redis = require('redis');
 
 class RedisClient {
   constructor() {
-    this.client = redis.createClient();
+    this.client = redis.createClient({
+      host: 'localhost',
+      port: 6379,
+    });
+
     this.client.on('error', (error) => {
       console.error('Error en el cliente Redis:', error);
     });
   }
 
   isAlive() {
-    return this.client.ping((error, reply) => {
-      if (reply === 'PONG') return true;
-
-      return false;
-    });
+    return this.client.options;
   }
 
   async get(key) {
@@ -30,4 +29,5 @@ class RedisClient {
   }
 }
 
-export const redisClient = new RedisClient();
+const redisClient = new RedisClient();
+module.exports = redisClient;
