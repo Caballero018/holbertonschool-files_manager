@@ -10,9 +10,11 @@ class RedisClient {
   }
 
   isAlive() {
-    if (this.client.connected) return true;
+    this.client.ping((error, reply) => {
+      if (reply === 'PONG') return true;
 
-    return false;
+      return false;
+    });
   }
 
   async get(key) {
