@@ -5,5 +5,5 @@ docker-compose.yml
 /node_modules
 
 main.js
-utils
+./utils/db.js
 controllers
