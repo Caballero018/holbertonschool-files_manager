@@ -1,23 +1,36 @@
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = process.env.DB_PORT || 27017;
 const DB_DATABASE = process.env.DB_DATABASE || 'files_manager';
-const url = `mongodb://${DB_HOST}:${DB_PORT}`;
+const url = `mongodb://root:root@${DB_HOST}:${DB_PORT}`;
 
 class DBClient {
   constructor() {
-    MongoClient.connect(url, { useUnifiedTopology: true }, (client, error) => {
-      if (error) {
-        console.error(`Error connecting to database: ${error}`);
+    MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
+      if (err) console.error(err);
+
+      this.db = client.db(DB_DATABASE);
+      if (!this.collectionExists('users')) {
+        this.db.createCollection('users', (err) => {
+          if (err) console.error(err);
+        });
       }
-      if (!error) {
-        this.db = client.db(DB_DATABASE);
-        this.users = this.db.collection('users');
-        this.files = this.db.collection('files');
-        this.a = true;
+      this.users = this.db.collection('users');
+
+      if (!this.collectionExists('files')) {
+        this.db.createCollection('files', (err) => {
+          if (err) console.error(err);
+        });
       }
+      this.files = this.db.collection('files');
     });
+  }
+
+  async collectionExists(collectionName) {
+    const collections = await this.db.listCollections({ name: collectionName }).toArray();
+    return collections.length > 0;
   }
 
   async isAlive() {
@@ -25,13 +38,11 @@ class DBClient {
   }
 
   async nbUsers() {
-    const users = this.users.countDocuments();
-    return users;
+    return this.users.countDocuments();
   }
 
   async nbFiles() {
-    const files = this.files.countDocuments();
-    return files;
+    return this.files.countDocuments();
   }
 }
 
