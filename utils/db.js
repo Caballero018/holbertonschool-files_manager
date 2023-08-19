@@ -12,9 +12,11 @@ const url = `mongodb://${AUTH}${DB_HOST}:${DB_PORT}`;
 class DBClient {
   constructor() {
     MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
-      if (err) console.error(err);
-
       this.db = client.db(DB_DATABASE);
+      if (err) {
+        this.db = false;
+        console.error(err);
+      }
       if (!this.collectionExists('users')) {
         this.db.createCollection('users', (err) => {
           if (err) console.error(err);
