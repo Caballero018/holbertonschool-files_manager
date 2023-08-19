@@ -1,14 +1,11 @@
 const { promisify } = require('util');
 const redis = require('redis');
-
-let REDIS_HOST = 'localhost';
-
-if (process.env.REDIS_HOST) REDIS_HOST = process.env.REDIS_HOST;
+const config = require('../config');
 
 class RedisClient {
   constructor() {
     this.client = redis.createClient({
-      host: `${REDIS_HOST}`,
+      host: `${config.REDIS_HOST}`,
       port: 6379,
     });
 
