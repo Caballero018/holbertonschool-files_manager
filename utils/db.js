@@ -37,7 +37,7 @@ class DBClient {
   }
 
   async isAlive() {
-    return this.db === null;
+    return this.db !== null;
   }
 
   async nbUsers() {
