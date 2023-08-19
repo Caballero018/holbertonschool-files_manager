@@ -14,30 +14,13 @@ class DBClient {
     MongoClient.connect(url, { useUnifiedTopology: true }, (err, client) => {
       if (!err) {
         this.db = client.db(DB_DATABASE);
-
-        if (!this.collectionExists('users')) {
-          this.db.createCollection('users', (err) => {
-            if (err) console.error(err);
-          });
-        }
         this.users = this.db.collection('users');
-
-        if (!this.collectionExists('files')) {
-          this.db.createCollection('files', (err) => {
-            if (err) console.error(err);
-          });
-        }
         this.files = this.db.collection('files');
       } else {
         console.error(err.message);
         this.db = false;
       }
     });
-  }
-
-  async collectionExists(collectionName) {
-    const collections = await this.db.listCollections({ name: collectionName }).toArray();
-    return collections.length > 0;
   }
 
   async isAlive() {
