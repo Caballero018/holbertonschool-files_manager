@@ -2,7 +2,9 @@ require('dotenv').config();
 const { promisify } = require('util');
 const redis = require('redis');
 
-const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
+let REDIS_HOST = 'localhost';
+
+if (process.env.REDIS_HOST) REDIS_HOST = process.env.REDIS_HOST;
 
 class RedisClient {
   constructor() {
