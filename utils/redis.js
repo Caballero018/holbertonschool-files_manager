@@ -1,10 +1,13 @@
+require('dotenv').config();
 const { promisify } = require('util');
 const redis = require('redis');
+
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
 
 class RedisClient {
   constructor() {
     this.client = redis.createClient({
-      host: 'redis',
+      host: `${REDIS_HOST}`,
       port: 6379,
     });
 
