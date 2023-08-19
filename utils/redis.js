@@ -1,4 +1,3 @@
-require('dotenv').config();
 const { promisify } = require('util');
 const redis = require('redis');
 
