@@ -1,4 +1,3 @@
-require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
 const DB_HOST = process.env.DB_HOST || 'localhost';
