@@ -5,4 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use('/', routes);
-app.listen(PORT);
+
+app.listen(PORT, () => {
+  console.log(`Express server at http://localhost:${PORT}`);
+});
